@@ -35,5 +35,4 @@ public class TaskAssignerController {
 	public ArrayList<Task> searchTaskByAssigneeId(final int assigneeId) {
 		return ASSIGNER.searchTaskByAssigneeId(assigneeId);
 	}
-	
 }

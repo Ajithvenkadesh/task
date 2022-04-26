@@ -1,8 +1,8 @@
 package com.taskManagement.view;
 
-import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Displays the menu for task and assignee.
@@ -11,31 +11,33 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class MenuLauncher {
-	public static final Scanner input = new Scanner(System.in);
+	public static final Scanner INPUT = new Scanner(System.in);
+	public static final Logger LOGGER = Logger.getLogger(MenuLauncher.class.getName());
 	
 	/**
 	 * Displays the menu for task and assignee
 	 * 
 	 * @param args unused
-	 * @throws SQLException 
 	 * @throws InputMismatchException when invalid input is entered.
 	 */
-	public static void main(String[] args) throws SQLException {
-		int choice = 0;
-		
-		final TaskMenu taskMenu = new TaskMenu();
+	public static void main(String[] args) {
+		int choice;
+        final TaskMenu taskMenu = new TaskMenu();
 		final AssigneeMenu assigneeMenu = new AssigneeMenu();
 		
 		do {
-			System.out.println ("Enter 1 for assignee menu"
+			 LOGGER.info("Enter 1 for assignee menu"
 					+ "\n Enter 2 for task menu"
 					+ "\n Enter 3 to exit");
-			try {
-			    choice = input.nextInt();
-			    input.nextLine();
+			
+			 try {
+			    choice = INPUT.nextInt();
+			    INPUT.nextLine();
 			} catch (InputMismatchException exception) {
-				System.out.println ("Only integer value is accepted enter integer value ");
-			}
+				LOGGER.warning("Only integer value is accepted enter integer value ");
+				choice = INPUT.nextInt();
+				INPUT.nextLine();
+		    }
 			
 			switch (choice) {
 			case 1 :
@@ -45,7 +47,7 @@ public class MenuLauncher {
 				taskMenu.displayOptions();
 				break;
 			default :
-				System.out.println ("wrong choice");
+				LOGGER.warning("wrong choice");
 				break;
 			}
 		} while (choice != 3);

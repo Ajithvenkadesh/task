@@ -1,13 +1,12 @@
 package com.taskManagement.controller;
 
-import java.sql.SQLException;
 import com.taskManagement.model.Assignee;
 import com.taskManagement.service.AssigneeService;
 import com.taskManagement.service.implVersion2.AssigneeImplementation;
 
 /**
- * Invokes the methods of Assignee model 
- * and assignee details class.
+ * Invokes the methods of Assignee 
+ * implementation class.
  * 
  * @author Ajith venkadesh
  * @version 1.0
@@ -23,12 +22,7 @@ public class AssigneeController {
 	 * @return Success or failure message.
 	 */
 	public String createAssignee(final Assignee newAssignee) {
-		try {
-			return ASSIGNEE.create(newAssignee);
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		return null;
+		return ASSIGNEE.create(newAssignee);
 	}
 	
 	/**
@@ -39,12 +33,8 @@ public class AssigneeController {
 	 * @return Success or failure message.
 	 */
 	public String deleteAssignee(final int id) {
-		try {
-			return ASSIGNEE.delete(id);
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		return null;
+		return ASSIGNEE.delete(id);
+		
 	}
 	
 	/**
@@ -56,12 +46,7 @@ public class AssigneeController {
 	 * @return Success or failure message.
 	 */
 	public String updateAssignee(final int assigneeId, final String assigneeName) {
-		try {
-			return ASSIGNEE.update(assigneeId, assigneeName);
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		return null;
+		return ASSIGNEE.update(assigneeId, assigneeName);
 	}
 	
 	/**
@@ -72,11 +57,6 @@ public class AssigneeController {
 	 * @return Required assignee record.
 	 */
 	public Assignee searchParticularAssignee(final int id) {
-		try {
-			return ASSIGNEE.search(id);
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		return null;
+		return ASSIGNEE.search(id);
 	}
 }

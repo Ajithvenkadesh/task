@@ -1,6 +1,5 @@
 package com.taskManagement.controller;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import com.taskManagement.model.Task;
@@ -8,7 +7,7 @@ import com.taskManagement.service.TaskService;
 import com.taskManagement.service.implVersion2.TaskImplementation;
 
 /**
- * Used to invoke the methods of Task model.
+ * Used to invoke the methods of Task implementation class.
  * 
  * @author Ajith venkadesh
  * @version 1.0
@@ -23,7 +22,7 @@ public class TaskController {
 	 * @param newTask Object of task class.
 	 * @return Success or failure message.
 	 */
-	public String createTask(Task newTask) {
+	public String createTask(final Task newTask) {
 		return TASK.create(newTask);
 	}
 	
@@ -47,6 +46,7 @@ public class TaskController {
 	public String deleteTask(final int id) {
 		return TASK.delete(id);
 	}
+	
 	/**
 	 * Calls the update task method from
 	 * task implementation method.
@@ -72,7 +72,6 @@ public class TaskController {
 	 * 
 	 * @param id Id of the task to be searched.
 	 * @return Required task.
-	 * @throws SQLException 
 	 */
 	public Task searchParticularTask(final int id) {
 		return TASK.search(id);
@@ -83,21 +82,9 @@ public class TaskController {
 	 * task implementation method.
 	 * 
 	 * @param taskStatus Status of the task.
+	 * @return list of tasks.
 	 */
 	public ArrayList<Task> searchTaskByStatus(final String taskStatus) {
 		return TASK.searchTaskByStatus(taskStatus);
-	}
-
-	/**
-	 * Calls the format date method from 
-	 * task implementation class.
-	 * 
-	 * @param intermediateDate String format of date.
-	 * @return formatted date.
-	 */
-	public Date formatDate(final String intermediateDate) {
-		final TaskImplementation taskImplementation = new TaskImplementation();
-		
-		return taskImplementation.formatDate(intermediateDate);
 	}
 }

@@ -1,7 +1,5 @@
 package com.taskManagement.service.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -137,23 +135,5 @@ public class TaskImplementation implements TaskService {
 			}
 		}
 		return taskList;
-	}
-	
-	/**
-	 * Generates date from the string format.
-	 * 
-	 * @param intermediateDate String format of date
-	 * @return date format of the string.
-	 */
-	public Date formatDate(final String intermediateDate) throws NullPointerException {
-		Date date = null;
-						
-		try {
-		    final SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yy");
-			date = formatDate.parse(intermediateDate);
-		} catch (ParseException e) {
-			System.out.println ("You have entered wrong date format enter date in dd/mm/yyyy format");
-		}
-		return date;
 	}
 }

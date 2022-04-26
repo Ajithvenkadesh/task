@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import com.taskManagement.model.Assignee;
+import com.taskManagement.view.MenuLauncher;
 
 /**
  * Creates, deletes, reads, updates assignee records.
@@ -22,24 +23,23 @@ public class AssigneeDao {
 	 * @return Success or failure message.
 	 */
 	public String createAssignee(final int id, final String name) {
-		final PreparedStatement statement;
-		
-		int rowsInserted = 0;
 		final Connector connector = new Connector();
+		connector.connect();
 		final String sql = "INSERT INTO assignee (assignee_id, assignee_name) VALUES (?, ?)";
-		connector.connect();		
+		PreparedStatement statement;
 		
 		try {
 			statement = Connector.connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.setString(2, name);
-			rowsInserted = statement.executeUpdate();
+							
+			if (statement.executeUpdate() > 0) {
+			    return "A new assignee was inserted successfully!";
+			}
 		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		
-		if (rowsInserted > 0) {
-		    return "A new assignee was inserted successfully!";
+			MenuLauncher.LOGGER.warning("Enter new assignee id");
+			createAssignee(MenuLauncher.INPUT.nextInt(), name);
+			MenuLauncher.INPUT.nextLine();
 		}
 		return "Assignee not inserted";
 	}
@@ -52,25 +52,20 @@ public class AssigneeDao {
 	 * @return Success or failure message.
 	 */
 	public String update(final int id, final String name) {
-		final PreparedStatement statement;
-		
-		int rowsUpdated = 0;
 		final String sql = "UPDATE assignee SET assignee_name=? WHERE assignee_id=?";
 		final Connector connector = new Connector();
 		connector.connect(); 
+		PreparedStatement statement;
 		
 		try {
 			statement = Connector.connection.prepareStatement(sql);
 			statement.setString(1, name);
 			statement.setInt(2, id);
-			rowsUpdated = statement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		
-		if (rowsUpdated > 0) {
-		    return "An existing user was updated successfully!";
-		}
+			
+			if (statement.executeUpdate() > 0) {
+			    return "An existing user was updated successfully!";
+			}
+		} catch (SQLException e) {}
 		return "Assignee was not updated";
 	}
 	
@@ -81,24 +76,18 @@ public class AssigneeDao {
 	 * @return Success or failure message.
 	 */
 	public String delete(final int id) {
-		final PreparedStatement statement;
-		
-		int rowsDeleted = 0; 
 		final String sql = "DELETE FROM assignee WHERE assignee_id=?";
 		final Connector connector = new Connector();
-		connector.connect(); 
+		connector.connect();
 		
 		try {
-			statement = Connector.connection.prepareStatement(sql);
-			statement.setInt(1, id);
-			rowsDeleted = statement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		
-		if (rowsDeleted > 0) {
-		    return "A user was deleted successfully!";
-		}
+		    final PreparedStatement statement = Connector.connection.prepareStatement(sql);
+		    statement.setInt(1, id);
+						
+		    if (statement.executeUpdate() > 0) {
+		        return "A user was deleted successfully!";
+		    }
+		} catch (SQLException exception) {}
 		return "User was not deleted";
 	}
 	
@@ -109,26 +98,18 @@ public class AssigneeDao {
 	 * @return Object of assignee class.
 	 */
 	public Assignee search(final int id) {
-		final ResultSet result;
-		final Statement statement;
-		
-		final String sql = "SELECT * FROM assignee where assignee_id = " + id;
-		final Connector connector = new Connector();
-		connector.connect();
-				
 		try {
-			statement = Connector.connection.createStatement();
-			result = statement.executeQuery(sql);
-			
-			while (result.next()){
-			    final int aasignee_id = result.getInt("assignee_id");
-			    final String name = result.getString(2);
-			    final Assignee assignee = new Assignee(aasignee_id, name);
+		    final String sql = "SELECT * FROM assignee WHERE assignee_id = " + id;
+		    final Connector connector = new Connector();
+		    connector.connect();
+		    final Statement statement = Connector.connection.createStatement();
+		    final ResultSet result = statement.executeQuery(sql);
+		    			
+		    while (result.next()){
+			    Assignee assignee = new Assignee(result.getInt(1), result.getString(2));
 			    return assignee;
-			}
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
-		return null;
+		    }
+		} catch (SQLException exception) {}
+		 return null;	
 	}	   
 }

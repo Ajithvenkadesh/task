@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import com.taskManagement.dao.TaskDao;
 import com.taskManagement.model.Task;
 import com.taskManagement.service.TaskService;
+import com.taskManagement.view.MenuLauncher;
 
 /**
  * Implements the methods of assignee service.
@@ -92,14 +93,12 @@ public class TaskImplementation implements TaskService {
 	 * @return Date .
 	 */
 	public Date formatDate(final String intermediateDate) {
-		Date date = null;
-		
 		try {
 		    final SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-			date = formatDate.parse(intermediateDate);
+		    return formatDate.parse(intermediateDate);
 		} catch (ParseException e) {
-			System.out.println ("You have entered wrong date format enter date in dd/mm/yyyy format");
+			MenuLauncher.LOGGER.warning("You have entered wrong date format enter date in yyyy-MM-dd format");
+			return formatDate(MenuLauncher.INPUT.nextLine());
 		}
-		return date;
 	}
 }

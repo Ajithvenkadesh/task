@@ -1,7 +1,5 @@
 package com.taskManagement.service;
 
-import java.sql.SQLException;
-
 import com.taskManagement.model.Assignee;
 
 /**
@@ -17,9 +15,8 @@ public interface AssigneeService {
 	 * 
 	 * @param assignee Object of assignee class.
 	 * @return success or failure message.
-	 * @throws SQLException 
 	 */
-	public String create(final Assignee assignee) throws SQLException;
+	public String create(final Assignee assignee);
 			
 	/**
 	 * Deletes a particular assignee by using assignee id.
@@ -27,7 +24,7 @@ public interface AssigneeService {
 	 * @param id Id of the assignee.
 	 * @return success or failure message.
 	 */
-	public String delete(final int id) throws SQLException;
+	public String delete(final int id);
 	
 	/**
 	 * Updates a particular assignee by using assignee id.
@@ -36,7 +33,7 @@ public interface AssigneeService {
 	 * @param name Name of the assignee.
 	 * @return Success or failure message.
 	 */
-	public String update(final int id, final String name)throws SQLException;
+	public String update(final int id, final String name);
 	
 	/**
 	 * Searches a particular assignee by using assignee id.
@@ -44,5 +41,5 @@ public interface AssigneeService {
 	 * @param id Id of the assignee.
 	 * @return Required assignee record.
 	 */
-	public 	Assignee search(final int id)throws SQLException;
+	public 	Assignee search(final int id);
 }

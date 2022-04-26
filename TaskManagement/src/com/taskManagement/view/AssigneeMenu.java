@@ -1,7 +1,5 @@
 package com.taskManagement.view;
 
-import java.sql.SQLException;
-
 import com.taskManagement.controller.AssigneeController;
 import com.taskManagement.model.Assignee;
 import com.taskManagement.validation.Validator;
@@ -16,34 +14,34 @@ import com.taskManagement.validation.Validator;
  */
 public class AssigneeMenu {
     
-	public void dispalyOptions() throws SQLException {
-	    final String choice;
-    
-        final AssigneeController controller = new AssigneeController();
+	/**
+	 * Display all options available for assignee.
+	 */
+	public void dispalyOptions() {
+	    final AssigneeController controller = new AssigneeController();
         final TaskMenu menu = new TaskMenu();
         final AssigneeDetails details = new AssigneeDetails();
         final Validator validator = new Validator();
                
-        System.out.println ("\n Enter 1 for creating new assignee"
+        MenuLauncher.LOGGER.info("\n Enter 1 for creating new assignee"
 		        + "\n Enter 2 for updating a partcular assignee"
 		        + "\n Enter 3 for deleting a particular assignee"
 		        + "\n Enter 4 searching a particular assignee"
 		        + "\n Enter * to move to task menu ");
-        choice = MenuLauncher.input.nextLine();
-    
-        switch (choice) {
+            
+        switch (MenuLauncher.INPUT.nextLine()) {
         case "1" :
         	 final Assignee assignee = new Assignee(details.getAssigneeId(),
      	             validator.validateName(details.getAssigneeName()));
-        	System.out.println(controller.createAssignee(assignee));
+        	 MenuLauncher.LOGGER.info(controller.createAssignee(assignee));
     	    break;
         case "2" :
-    	    System.out.println (controller.updateAssignee(validator.validateAssigneeId
+        	MenuLauncher.LOGGER.info(controller.updateAssignee(validator.validateAssigneeId
     	    		(details.getAssigneeId()), validator.validateName
     	    		(details.getAssigneeName())));
     	    break;
         case "3" :
-    	    System.out.println (controller.deleteAssignee(validator.validateAssigneeId
+        	MenuLauncher.LOGGER.info(controller.deleteAssignee(validator.validateAssigneeId
     	    		(details.getAssigneeId())));
     	    break;
         case "4" :
@@ -54,7 +52,7 @@ public class AssigneeMenu {
     	    menu.displayOptions();
     	    break;
         default :
-    	    System.out.println ("You have enetered wrong choice");
+        	MenuLauncher.LOGGER.warning("You have enetered wrong choice");
     	    break;
         }
     }

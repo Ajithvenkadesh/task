@@ -2,14 +2,13 @@ package com.taskManagement.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-
 import com.taskManagement.model.Task;
 
 /**
  * Lists the services available for task.
  * 
  * @author Ajith venkadesh
- *
+ * @version 1.0
  */
 public interface TaskService {
 	

@@ -1,7 +1,5 @@
 package com.taskManagement.view;
 
-import java.sql.SQLException;
-
 import com.taskManagement.controller.TaskAssignerController;
 import com.taskManagement.controller.TaskController;
 import com.taskManagement.model.Task;
@@ -20,18 +18,15 @@ public class TaskMenu {
 	/**
 	 * Displays all the options available for editing task,
 	 * assigning task to assignees.
-	 * @throws SQLException 
 	 */
-	public void displayOptions() throws SQLException {
-	    String choice;
-	
+	public void displayOptions() {
 	    final TaskController controller = new TaskController();
         final AssigneeMenu menu = new AssigneeMenu();
         final Validator validator = new Validator();
         final TaskDetails details = new TaskDetails();
         final TaskAssignerController taskAssigner = new TaskAssignerController();
                 
-        System.out.println ("\n Enter 1 for creating new task"
+        MenuLauncher.LOGGER.info ("\n Enter 1 for creating new task"
 		        + "\n Enter 2 for displaying all task"
 		        + "\n Enter 3 for updating a partcular task"
 		        + "\n Enter 4 for deleting a particular task"
@@ -40,29 +35,28 @@ public class TaskMenu {
 		        + "\n Enter 7 to search task by status"
 		        + "\n Enter 8 to list the task assigned to assignee"
 		        + "\n Enter * to move to assignee menu ");
-        choice = MenuLauncher.input.nextLine();
-        
-        switch (choice) {
+                
+        switch (MenuLauncher.INPUT.nextLine()) {
         case "1" :
         	final Task task = new Task(details.getTaskId(),
         			validator.validateName(details.getTaskName()),details.getTaskDescription(),
-        			validator.validateStartDate(controller.formatDate(details.getStartDate())),
-        			validator.validateDueDate(controller.formatDate(details.getDueDate())),
+        			validator.validateStartDate(details.getStartDate()),
+        			validator.validateDueDate(details.getDueDate()),
         			details.getTaskStatus());
-        	System.out.println (controller.createTask(task));
+        	MenuLauncher.LOGGER.info(controller.createTask(task));
         	break;
         case "2" :
         	details.printAllTask(controller.displayTask());
         	break;
         case "3" :
-        	System.out.println (controller.updateTask(validator.validateTaskId(details.getTaskId()),
+        	MenuLauncher.LOGGER.info(controller.updateTask(validator.validateTaskId(details.getTaskId()),
         			validator.validateName(details.getTaskName()),details.getTaskDescription(),
-        			details.getTaskStatus(), controller.formatDate(details.getStartDate()), 
-        			controller.formatDate(details.getDueDate())));
+        			details.getTaskStatus(), validator.validateStartDate(details.getStartDate()), 
+        			validator.validateDueDate(details.getDueDate())));
         	
         	break;
         case "4" :
-        	System.out.println (controller.deleteTask(validator.validateTaskId(details.getTaskId())));
+        	MenuLauncher.LOGGER.info(controller.deleteTask(validator.validateTaskId(details.getTaskId())));
         	break;
         case "5" :
         	details.printDetails(controller.searchParticularTask(validator.validateTaskId(details.getTaskId())));
@@ -82,7 +76,7 @@ public class TaskMenu {
         	menu.dispalyOptions();
         	break;
         default :
-        	System.out.println ("You have eneterd wrong choice");
+        	MenuLauncher.LOGGER.warning("You have entered wrong choice");
         	break;
         }
 	}

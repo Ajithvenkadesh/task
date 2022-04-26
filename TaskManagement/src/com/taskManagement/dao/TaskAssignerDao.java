@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import com.taskManagement.model.Task;
+import com.taskManagement.view.MenuLauncher;
 
 /**
  * Assigns task to assignee, searches task assigned to assignee.
@@ -25,20 +26,17 @@ public class TaskAssignerDao {
 	 * @param taskIdList List of task id.
 	 */
 	public void assignTask(final int assigneeId, final int[] taskIdList) {
-		
 		for (int initialValue = 0; initialValue < taskIdList.length; initialValue++) {
 			final Connector connector = new Connector();
 			connector.connect();
 			final String sql = "UPDATE task set assignee_id = ? where task_id = ? ";
-						
+			
 			try {
-				final PreparedStatement statement = Connector.connection.prepareStatement(sql);
-				statement.setInt(1, assigneeId);
-				statement.setInt(2, taskIdList[initialValue]);
-				statement.executeUpdate();
-			} catch (SQLException e) {
-				System.out.println ("Error while connecting to database");
-			}
+			    final PreparedStatement statement = Connector.connection.prepareStatement(sql);
+			    statement.setInt(1, assigneeId);
+			    statement.setInt(2, taskIdList[initialValue]);
+			    statement.executeUpdate();
+			} catch (SQLException exception) {}
 	    }
 	}
 	
@@ -49,32 +47,21 @@ public class TaskAssignerDao {
 	 * @return List of tasks.
 	 */
 	public ArrayList<Task> searchTaskByAssigneeId(final int assigneeId) {
-		final ResultSet result;
-		final Statement statement;
-		
 		final ArrayList<Task> list = new ArrayList<Task>();
 		final String sql = "SELECT * FROM task where assignee_id = " + assigneeId;
 		final Connector connector = new Connector();
-		connector.connect(); 
-				
+		connector.connect();
+		
 		try {
-			statement = Connector.connection.createStatement();
-			result = statement.executeQuery(sql);
+		    final Statement statement = Connector.connection.createStatement();
+		    final ResultSet result = statement.executeQuery(sql);
 			
-			while (result.next()){
-				final int id = result.getInt(1);
-				final String name = result.getString(2);
-				final String description = result.getString(3);
-				final String status = result.getString(4);
-				final String startDate = result.getString(5);
-				final String dueDate = result.getString(6);
-				final Task task = new Task(id, name, description,
-			    		formatDate(startDate), formatDate(dueDate), status);
-			    list.add(task);
-			}
-		} catch (SQLException e) {
-			System.out.println ("Error while connecting to database");
-		}
+			    while (result.next()){
+				    final Task task = new Task(result.getInt(1), result.getString(2), result.getString(3),
+			    	      	formatDate(result.getString(4)), formatDate(result.getString(5)), result.getString(6));
+			        list.add(task);
+			    }
+		} catch (SQLException exception) {}
 		return list;
 	}
 	
@@ -84,7 +71,7 @@ public class TaskAssignerDao {
 	 * @param intermediateDate Date in string format.
 	 * @return formatted date.
 	 */
-	Date formatDate(final String intermediateDate) {
+	private Date formatDate(final String intermediateDate) {
 		Date date = null;
 						
 		try {
@@ -92,6 +79,7 @@ public class TaskAssignerDao {
 			date = formatDate.parse(intermediateDate);
 		} catch (ParseException e) {
 			System.out.println ("You have entered wrong date format enter date in yyyy-mm-dd format");
+			formatDate(MenuLauncher.INPUT.nextLine());
 		}
 		return date;
 	}

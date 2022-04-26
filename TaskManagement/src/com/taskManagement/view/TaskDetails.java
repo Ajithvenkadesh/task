@@ -3,15 +3,13 @@ package com.taskManagement.view;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import com.taskManagement.exception.InvalidDescriptionException;
-import com.taskManagement.exception.InvalidStatusException;
 import com.taskManagement.model.Task;
 
 /**
  * Gets details about the task from the user like
  * task id, task name,task description,task status,
  * task start date, task due date and also it generates
- * date from from string format and also it generates
- * the task id automatically.
+ * date from from string format .
  *  
  * @author Ajith venkadesh.
  * @version 1.0
@@ -29,14 +27,15 @@ public class TaskDetails {
 	 * @throws InputMismatchException when invalid input is entered.
 	 */
 	public int getTaskId() {
-		int taskId = 0;
+		int taskId = 0 ;
 		
 		try {
-		    System.out.println ("Enter task id : ");
-		    taskId = MenuLauncher.input.nextInt();
-		    MenuLauncher.input.nextLine();
+			MenuLauncher.LOGGER.info("Enter task id : ");
+		    taskId = MenuLauncher.INPUT.nextInt();
+		    MenuLauncher.INPUT.nextLine();
 		} catch (InputMismatchException exception) {
-			System.out.println ("Only integer value is accepted");
+			MenuLauncher.LOGGER.warning("Only integer value is accepted");
+			getTaskId();
 		}
 		return taskId;
 	}
@@ -47,11 +46,8 @@ public class TaskDetails {
 	 * @return Name of the task.
 	 */
 	public String getTaskName() {
-		final String taskName;
-						
-		System.out.println ("Enter task Name : ");
-		taskName = MenuLauncher.input.nextLine();
-		return taskName;
+		MenuLauncher.LOGGER.info("Enter task Name : ");
+		return MenuLauncher.INPUT.nextLine();
 	}
 	
 	/**
@@ -60,17 +56,15 @@ public class TaskDetails {
 	 * @return Description about the task.
 	 */
 	String getTaskDescription() {
-		final String taskDescription;
-		
-		System.out.println ("Enter the task description :");
-		taskDescription = MenuLauncher.input.nextLine();
+		MenuLauncher.LOGGER.info("Enter the task description :");
+		final String taskDescription = MenuLauncher.INPUT.nextLine();
 		
 		try {
-		    if (taskDescription.length() < 2) {
+		    if (taskDescription.length() < 10) {
 			throw new InvalidDescriptionException("Too short description enter valid description");
 		    }
 		} catch (InvalidDescriptionException exception) {
-			System.out.println (exception);
+			getTaskDescription();
 		}
 		return taskDescription;
 	}
@@ -85,32 +79,26 @@ public class TaskDetails {
 	String getTaskStatus() {
 		int index = 0;
 		
-		System.out.println("The list of status avaialable are : ");
+		MenuLauncher.LOGGER.info("The list of status avaialable are : ");
 		
 		for (TaskStatus status : TaskStatus.values()) {
-			System.out.println ("ENTER  " + status.ordinal() + "  for   " + status);
+			MenuLauncher.LOGGER.info("ENTER  " + status.ordinal() + "  for   " + status);
 		}
 		
 		try {
-		    System.out.println ("Enter the value ");
-		    index = MenuLauncher.input.nextInt();
-		    MenuLauncher.input.nextLine();
+			MenuLauncher.LOGGER.info("Enter the value ");
+		    index = MenuLauncher.INPUT.nextInt();
+		    MenuLauncher.INPUT.nextLine();
 		} catch (InputMismatchException exception) {
-			System.out.println ("Enter only integer value");
+			MenuLauncher.LOGGER.warning("Enter only integer value");
+			index = MenuLauncher.INPUT.nextInt();
+		    MenuLauncher.INPUT.nextLine();
 		}
 		
-		try {
-			if (index > 2) {
-				throw new InvalidStatusException("No status found for the corrosponding number");
-			}
-		} catch (InvalidStatusException exception) {
-			System.out.println (exception);
-		}
-		
-		try {
+    	try {
 		    return TaskStatus.values()[index].toString();
 		} catch (ArrayIndexOutOfBoundsException exception) {
-			System.out.println ("Enter only the listed value");
+			getTaskStatus();
 		}
 		return null;
 	}
@@ -121,11 +109,8 @@ public class TaskDetails {
 	 * @return Date in string format.
 	 */
 	public String getDueDate() {
-		final String dueDate;
-				
-		System.out.println (" Enter Task Due Date : ");
-	    dueDate = MenuLauncher.input.nextLine();
-	    return dueDate;
+		MenuLauncher.LOGGER.info(" Enter Task Due Date : ");
+	    return MenuLauncher.INPUT.nextLine();
 	}
 	
 	/**
@@ -134,11 +119,8 @@ public class TaskDetails {
 	 * @return Start date of the task. 
 	 */
 	public String getStartDate() {
-		final String startDate;
-				
-		System.out.println (" Enter task start Date : ");
-	    startDate = MenuLauncher.input.nextLine();
-	    return startDate;
+		MenuLauncher.LOGGER.info(" Enter task start Date : ");
+	    return MenuLauncher.INPUT.nextLine();
 	}
 
 	/**
@@ -147,7 +129,7 @@ public class TaskDetails {
 	 * @param message Message to be printed.
 	 */
 	public void printMessage(final String message) {
-		System.out.println (message);
+		MenuLauncher.LOGGER.info(message);
 	}
 	
 	/**
@@ -157,11 +139,16 @@ public class TaskDetails {
 	 * @return id of the assignee.
 	 */
 	int getAssigneeId() {
-		final int assigneeId;
+		int assigneeId = 0;
 		
-		System.out.println ("Enter the assignee id :");
-		assigneeId = MenuLauncher.input.nextInt();
-		MenuLauncher.input.nextLine();
+		try {
+		    MenuLauncher.LOGGER.info("Enter the assignee id :");
+		    assigneeId = MenuLauncher.INPUT.nextInt();
+		    MenuLauncher.INPUT.nextLine();
+		} catch (InputMismatchException exception) {
+			MenuLauncher.LOGGER.warning("Enter only integer value");
+			getAssigneeId();
+		}
 		return assigneeId;
 	}
 	
@@ -171,18 +158,14 @@ public class TaskDetails {
 	 * @return list of task id.
 	 */
 	int[] getListOfTaskId() {
-		final int sizeOfList;
-		final int[] taskIdList;
+		MenuLauncher.LOGGER.info("Enter the total number of tasks");
+		int[] taskIdList = new int[ MenuLauncher.INPUT.nextInt()];
+		MenuLauncher.INPUT.nextLine();
 		
-		System.out.println ("Enter the total number of tasks");
-		sizeOfList = MenuLauncher.input.nextInt();
-		MenuLauncher.input.nextLine();
-		taskIdList = new int[sizeOfList];
-		
-		for (int initialValue = 0; initialValue < sizeOfList; initialValue++) {
-			System.out.println ("Enter the task id");
-			taskIdList [initialValue] = MenuLauncher.input.nextInt();
-			MenuLauncher.input.nextLine();			
+		for (int initialValue = 0; initialValue < taskIdList.length; initialValue++) {
+			MenuLauncher.LOGGER.info("Enter the task id");
+			taskIdList [initialValue] = MenuLauncher.INPUT.nextInt();
+			MenuLauncher.INPUT.nextLine();			
 		}
 		return taskIdList;
 	}
@@ -194,16 +177,16 @@ public class TaskDetails {
 	 * @throws NullPointerException when no task record found.
 	 */
 	void printDetails(final Task task) {
-		try {
-		    System.out.println ("Task details");
-		    System.out.println ("Task id : " + task.getTaskId());
-		    System.out.println ("Task name : " + task.getTaskName());
-		    System.out.println ("Task description : " + task.getTaskDescription());
-		    System.out.println ("Task start date : " + task.getTaskStartDate());
-		    System.out.println ("Task due date : " + task.getTaskDueDate());
-		    System.out.println ("Task status : " + task.getTaskStatus());
-		} catch (NullPointerException exception) {
-			System.out.println ("No task record found");
+		if (task == null) {
+			MenuLauncher.LOGGER.warning("No task found");
+		} else {
+		MenuLauncher.LOGGER.info("Task details");
+		MenuLauncher.LOGGER.info("Task id : " + task.getTaskId());
+		MenuLauncher.LOGGER.info("Task name : " + task.getTaskName());
+		MenuLauncher.LOGGER.info("Task description : " + task.getTaskDescription());
+		MenuLauncher.LOGGER.info("Task start date : " + task.getTaskStartDate());
+		MenuLauncher.LOGGER.info("Task due date : " + task.getTaskDueDate());
+		MenuLauncher.LOGGER.info("Task status : " + task.getTaskStatus());
 		}
 	}
 	
@@ -211,22 +194,20 @@ public class TaskDetails {
 	 * Prints all the available task.
 	 * 
 	 * @param taskCollection List of all available tasks.
-	 * @throws NullPointerException when no task record found.
 	 */
 	void printAllTask(final ArrayList<Task> taskCollection) {
-		try {
+		if (taskCollection.isEmpty()) {
+			MenuLauncher.LOGGER.warning("No task found");
+		} else {
 		    for (final Task task : taskCollection) {
-			    System.out.println ("Task details");
-			    System.out.println ("task id : " + task.getTaskId());
-			    System.out.println ("Task name is : " + task.getTaskName());
-			    System.out.println ("Task Description is : " + task.getTaskDescription());
-			    System.out.println ("Task start date is : " + task.getTaskStartDate());
-			    System.out.println ("Task due date is : " + task.getTaskDueDate());
-			    System.out.println ("Task status is : " + task.getTaskStatus());
+		    	MenuLauncher.LOGGER.info("Task details");
+		    	MenuLauncher.LOGGER.info("task id : " + task.getTaskId());
+		    	MenuLauncher.LOGGER.info("Task name is : " + task.getTaskName());
+		    	MenuLauncher.LOGGER.info("Task Description is : " + task.getTaskDescription());
+		    	MenuLauncher.LOGGER.info("Task start date is : " + task.getTaskStartDate());
+		    	MenuLauncher.LOGGER.info("Task due date is : " + task.getTaskDueDate());
+		    	MenuLauncher.LOGGER.info("Task status is : " + task.getTaskStatus());
 		    }
-		} catch (NullPointerException exception) {
-			System.out.println ("No task record found");
 		}
-		
 	}
 }

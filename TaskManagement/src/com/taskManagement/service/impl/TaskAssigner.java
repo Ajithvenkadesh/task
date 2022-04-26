@@ -25,10 +25,8 @@ public class TaskAssigner implements TaskAssignerService {
 	 * @return list of required tasks.
 	 */
 	private ArrayList<Task> findTask(final int[] taskIdList){
-		final int totalNOfTask;
-		
 		final ArrayList<Task> tasks = new ArrayList<Task>();
-		totalNOfTask = taskIdList.length;
+		final int totalNOfTask = taskIdList.length;
 		
 		for (int initialValue = 0; initialValue < totalNOfTask; initialValue++) {
             for (final Task currentTask : TaskImplementation.TASKCOLLECTION) {
@@ -60,13 +58,7 @@ public class TaskAssigner implements TaskAssignerService {
 				assignee = nextAssignee;
 			}
 		}
-		
-		try {
-			TASKMAP.put(assignee, findTask(taskIdList));
-		} catch (NullPointerException exception) {
-			System.out.println ("No aasignee record found for the corrospoding assignee id"
-					+ "\n Enter correct assignee id");
-		}
+		TASKMAP.put(assignee, findTask(taskIdList));
 	}
 	
 	/**
@@ -79,15 +71,11 @@ public class TaskAssigner implements TaskAssignerService {
 	public ArrayList<Task> searchTaskByAssigneeId(final int assigneeId) {
         ArrayList<Task> task = null;
         
-        try {
-		    for (final Map.Entry<Assignee, ArrayList<Task>> entry : TASKMAP.entrySet()) {
-			    if (entry.getKey().getAssigneeId() == assigneeId) {
-				    task = entry.getValue();
-			    }
-		    }
-        } catch (NullPointerException exception) {
-        	System.out.println ("No assignee record found");
-        }
+        for (final Map.Entry<Assignee, ArrayList<Task>> entry : TASKMAP.entrySet()) {
+			if (entry.getKey().getAssigneeId() == assigneeId) {
+				task = entry.getValue();
+			}
+		}
 		return task;
 	}
 }

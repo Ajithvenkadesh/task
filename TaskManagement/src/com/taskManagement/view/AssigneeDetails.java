@@ -23,11 +23,12 @@ public class AssigneeDetails {
 		int assigneeId = 0;
 		
 		try {
-		    System.out.println ("Enter the id of the assignee");
-		    assigneeId = MenuLauncher.input.nextInt();
-		    MenuLauncher.input.nextLine();
+			MenuLauncher.LOGGER.info("Enter the id of the assignee");
+		    assigneeId = MenuLauncher.INPUT.nextInt();
+		    MenuLauncher.INPUT.nextLine();
 		} catch (InputMismatchException exception) {
-			System.out.println ("Only integer value is accepted enter ineger value");
+			MenuLauncher.LOGGER.warning("Only integer value is accepted enter ineger value");
+			getAssigneeId();
 		}
 	    return assigneeId;
 	}
@@ -39,11 +40,8 @@ public class AssigneeDetails {
 	 * @return name of the assignee.
 	 */
 	public String getAssigneeName() {
-		final String assigneeName;
-				
-		System.out.println ("Enter the name of the assignee");
-		assigneeName = MenuLauncher.input.nextLine();
-		return assigneeName;
+		MenuLauncher.LOGGER.info("Enter the name of the assignee");
+		return MenuLauncher.INPUT.nextLine();
 	}
 	
 	/**
@@ -52,22 +50,21 @@ public class AssigneeDetails {
 	 * @param message Message to be printed.
 	 */
 	public void printMessage(final String message) {
-		System.out.println (message);
+		MenuLauncher.LOGGER.info(message);
 	}
 
 	/**
 	 * Prints the details about the assignee.
 	 * 
 	 * @param assigne Object of assignee class.
-	 * @throws NullPointerException when no task record found.
 	 */
 	void print(Assignee assignee) {
-		try {
-		    System.out.println ("Assignee details");
-		    System.out.println ("Assignee id is : " + assignee.getAssigneeId());
-		    System.out.println ("Assignee name is : " + assignee.getAssigneeName());
-		} catch (NullPointerException exception) {
-			System.out.println ("No record found for the corrosponding id");
+		if (assignee == null) {
+			MenuLauncher.LOGGER.warning("No assignee record found");
+		} else {
+			MenuLauncher.LOGGER.info("Assignee details");
+			MenuLauncher.LOGGER.info("Assignee id is : " + assignee.getAssigneeId());
+			MenuLauncher.LOGGER.info("Assignee name is : " + assignee.getAssigneeName());
 		}
 	}
 }

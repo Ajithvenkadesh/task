@@ -25,20 +25,14 @@ public class Validator {
 	 * @return validated name.
 	 */
 	public String validateName(final String name) {
-		final String regularExpression;
-		final Pattern stringPattern;
-		final Matcher nameMatcher;
-		String assigneeName;
-		
-		regularExpression = "[a-zA-Z\s]{1,30}$";
-		stringPattern = Pattern.compile(regularExpression);
-		nameMatcher = stringPattern.matcher(name);
+		final String regularExpression = "[a-zA-Z\s]{1,30}$";
+		final Pattern stringPattern = Pattern.compile(regularExpression);
+		final Matcher nameMatcher = stringPattern.matcher(name);
 		final AssigneeDetails details = new AssigneeDetails();
-		
+				
 		if (!nameMatcher.matches()) {
 		    details.printMessage("Invalid name enter proper name");
-			assigneeName = details.getAssigneeName();
-			return validateName(assigneeName);
+			return validateName(details.getAssigneeName());
 		} else {
 			return name;
 		}
@@ -52,87 +46,53 @@ public class Validator {
 	 * @throws ParseException if format of the date is wrong.
 	 * @throws NullPointerException when the start date is null.
 	 */
-	public Date validateStartDate(final Date startDate)	{
-		String intermediateStartDate;
+	public Date validateStartDate(final String startDate)	{
 		Date today;
-		String date;
-		
 		final AssigneeDetails details = new AssigneeDetails();
-		final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		today = null;
-		date = formatter.format(new Date());
+		final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		final String date = formatter.format(new Date());
 		
 		try {
 			today = formatter.parse(date);
-		} catch (ParseException exception) {
-			details.printMessage("nvalid date format");
-		} 
-		
-		try {				
-		    if (startDate.compareTo(today) < 0) {
-			    details.printMessage("Invalid start date, start date cannot less than today");
-			    intermediateStartDate = MenuLauncher.input.nextLine();
-			    Date taskStartDate = null;
-			
-			    try {
-				    taskStartDate = formatter.parse(intermediateStartDate);
-			    } catch (ParseException e) {
-				    details.printMessage("Invalid date format enter date in dd/mm/yyyy format");
-			    }
-			    return validateStartDate(taskStartDate);
-		    } else {		   
-		        return startDate;
-		    }
-		} catch (NullPointerException exception) {
-			details.printMessage("Start date cannot be null");
+		} catch (ParseException e) {
+			details.printMessage("Enter today's date manually");
+			today = formatDate(MenuLauncher.INPUT.nextLine());
 		}
-		return startDate;
+			
+		if (formatDate(startDate).compareTo(today) < 0) {
+		   	details.printMessage("Invalid start date, start date cannot less than today");
+		    return validateDueDate(MenuLauncher.INPUT.nextLine());
+		} else {
+		    return formatDate(startDate);
+		}
 	}
 	
 	/**
-	 * Validated the due date of the task.
+	 * Validates the due date of the task.
 	 * 
 	 * @param dueDate Due date of the task.
 	 * @return Validated due date.
 	 * @throws ParseException if format of the date is wrong.
-	 * @throws NullPointerException when the start date is null.
 	 */
-	public Date validateDueDate(final Date dueDate)	{
-		String intermediateDueDate;
-		Date today = null;
-		String date;
-				
+	public Date validateDueDate(final String dueDate) {
+		Date today;
 		final AssigneeDetails details = new AssigneeDetails();
-		final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		date = formatter.format(new Date());
-				
-		try {
-			today = formatter.parse(date);
-		} catch (ParseException exception) {
-			details.printMessage("wrong date format");
-		} catch (NullPointerException exception) {
-			details.printMessage("unable to get today's date");
-		}
+		final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		final String date = formatter.format(new Date());
 		
 		try {
-		    if (dueDate.compareTo(today) < 0) {
-		    	details.printMessage("Invalid due date, due date cannot less than today");
-			    intermediateDueDate = MenuLauncher.input.nextLine();
-			    Date taskDueDate = null;
-			
-			    try {
-				    taskDueDate = formatter.parse(intermediateDueDate);
-			    } catch (ParseException e) {
-			    	details.printMessage("Invalid date format enter the date in dd/mm/yyyy format");
-			    }
-			    return validateDueDate(taskDueDate);
-		    } else {
-		        return dueDate;
-		    }
-		} catch (NullPointerException exception) {
-			details.printMessage("Due date cannot be null");
+			today = formatter.parse(date);
+		} catch (ParseException e) {
+			System.out.println ("Enter today's date manually");
+			today = formatDate(MenuLauncher.INPUT.nextLine());
 		}
-		return dueDate;
+			
+		if (formatDate(dueDate).compareTo(today) < 0) {
+		   	details.printMessage("Invalid due date, due date cannot less than today");
+		    return validateDueDate(MenuLauncher.INPUT.nextLine());
+		} else {
+		    return formatDate(dueDate);
+		}
 	}
 	
 	/**
@@ -142,15 +102,10 @@ public class Validator {
 	 * @return Validated id.
 	 */
 	public int validateAssigneeId(final int id) {
-		final String regularExpression;
-		final Pattern stringPattern;
-		final Matcher nameMatcher;
-		String assigneeId;
-		
-		assigneeId = String.valueOf(id);
-		regularExpression = "^[0-9]{1,2}[:.,-]?$";
-		stringPattern = Pattern.compile(regularExpression);
-		nameMatcher = stringPattern.matcher(assigneeId);
+		final String assigneeId = String.valueOf(id);
+		final String regularExpression = "^[0-9]{1,2}[:.,-]?$";
+		final Pattern stringPattern = Pattern.compile(regularExpression);
+		final Matcher nameMatcher = stringPattern.matcher(assigneeId);
 		final AssigneeDetails details = new AssigneeDetails();
 		
 		if (!nameMatcher.matches()) {
@@ -168,15 +123,10 @@ public class Validator {
 	 * @return Validated id.
 	 */
 	public int validateTaskId(final int id) {
-		final String regularExpression;
-		final Pattern stringPattern;
-		final Matcher nameMatcher;
-		String taskId;
-		
-		taskId = String.valueOf(id);
-		regularExpression = "^[0-9]{1,2}[:.,-]?$";
-		stringPattern = Pattern.compile(regularExpression);
-		nameMatcher = stringPattern.matcher(taskId);
+		final String taskId = String.valueOf(id);
+		final String regularExpression = "^[0-9]{1,2}[:.,-]?$";
+		final Pattern stringPattern = Pattern.compile(regularExpression);
+		final Matcher nameMatcher = stringPattern.matcher(taskId);
 		final TaskDetails details = new TaskDetails();
 		
 		if (!nameMatcher.matches()) {
@@ -184,6 +134,22 @@ public class Validator {
 			return validateAssigneeId(details.getTaskId());
 		} else {
 		    return id;
+		}
+	}
+	
+	/**
+	 * Generates date from string format.
+	 * 
+	 * @param intermediateDate Date in string format.
+	 * @return Formatted date.
+	 */
+	private Date formatDate(final String intermediateDate) {
+		try {
+		    final SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+			return formatDate.parse(intermediateDate);
+		} catch (ParseException e) {
+			MenuLauncher.LOGGER.warning("You have entered wrong date format enter date in yyyy-MM-dd format");
+			return formatDate(MenuLauncher.INPUT.nextLine());
 		}
 	}
 }
